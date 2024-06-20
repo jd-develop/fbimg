@@ -14,10 +14,12 @@ SOFTWARE.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <png.h>
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 int main(int argc, char** argv)
 {
@@ -26,12 +28,9 @@ int main(int argc, char** argv)
     struct fb_var_screeninfo vinfo;
     struct fb_fix_screeninfo finfo;
     long int screensize;
-    FILE *fp;
-    png_structp pngptr;
-    png_bytepp rows;
-    unsigned int height;
-    unsigned int width;
-    unsigned int x, y;
+    int height, width, n, original_width;
+    unsigned char* data;
+    unsigned int i, x, y;
     long int location;
     unsigned int x_for_loc;
 
@@ -77,56 +76,24 @@ int main(int argc, char** argv)
     }
     // printf("The framebuffer device was mapped to memory successfully.\n");
     
-    /* open image and print it */
+    /* open image */
     if (argc < 2)
     {
         perror("Accepts one image as argument");
         exit(6);
     }
 
-    fp = fopen(argv[1], "r");
-    if (!fp) {
-        perror("File could not be opened for reading");
+    data = stbi_load(argv[1], &width, &height, &n, 4);
+    if (data == NULL)
+    {
+        perror("An error occured when reading the image.");
         exit(7);
     }
 
-    pngptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!pngptr) {
-        perror("Creation of pngptr failed");
-        exit(8);
-    }
-
-    png_infop pnginfo = png_create_info_struct(pngptr);
-    if (!pnginfo) {
-        perror("Creation of pnginfo failed");
-        exit(9);
-    }
-    
-    if (setjmp(png_jmpbuf(pngptr))) {
-        perror("Error during init_io");
-        exit(10);
-    }
-
-    png_init_io(pngptr, fp);
-
-    png_read_png(pngptr, pnginfo, PNG_TRANSFORM_IDENTITY, NULL);
-    rows = png_get_rows(pngptr, pnginfo);
-    height = png_get_image_height(pngptr, pnginfo);
-    width = png_get_image_width(pngptr, pnginfo);
-
-    unsigned int mul = 3;
-    png_byte col_type = png_get_color_type(pngptr, pnginfo);
-    if (col_type == PNG_COLOR_TYPE_RGB) {
-        mul = 3;
-    } else if (col_type == PNG_COLOR_TYPE_RGB_ALPHA) {
-        mul = 4;
-    } else {
-        perror("Color type unsupported yet");
-        exit(11);
-    }
-
+    /* print it */
     if (height > vinfo.yres-5)
         height = vinfo.yres-5;
+    original_width = width;
     if (width > vinfo.xres)
         width = vinfo.xres;
     for (y = 0; y < height; y++)
@@ -138,15 +105,15 @@ int main(int argc, char** argv)
                 (y+vinfo.yoffset) * finfo.line_length;
             if (vinfo.bits_per_pixel == 32)
             {
-                *(fbp + location) = rows[y][x*mul+2];
-                *(fbp + location + 1) = rows[y][x*mul+1];
-                *(fbp + location + 2) = rows[y][x*mul+0];
-                *(fbp + location + 3) = 0;
+                *(fbp + location) = data[(y*original_width + x)*4 + 2];
+                *(fbp + location + 1) = data[(y*original_width + x)*4 + 1];
+                *(fbp + location + 2) = data[(y*original_width + x)*4 + 0];
+                *(fbp + location + 3) = data[(y*original_width + x)*4 + 3];
             } else // Assume 16 bpp.
             {
-                int b = rows[y][x*mul+2];
-                int g = rows[y][x*mul+1];
-                int r = rows[y][x*mul+0];
+                int b = data[(y*original_width + x)*4 + 2];
+                int g = data[(y*original_width + x)*4 + 1];
+                int r = data[(y*original_width + x)*4 + 0];
                 unsigned short int t = r<<11 | g << 5 | b;
                 *((unsigned short int*)(fbp + location)) = t;
             }
@@ -158,6 +125,8 @@ int main(int argc, char** argv)
     /* Close memory mapped and file descriptor. */
     munmap(fbp, screensize);
     close(fbfd);
+    /* Free the image data */
+    stbi_image_free(data);
 
     return 0;
 }

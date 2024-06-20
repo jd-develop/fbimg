@@ -4,14 +4,13 @@ Display images in tty using the Linux Framebuffer!
 
 Original code found in [Qt Documentation](https://doc.qt.io/archives/3.3/emb-framebuffer-howto.html), a little bit modified by [Hugo Rodde](https://github.com/roddehugo/linuxfb).
 
->[!Important]
-> For now, only supports PNG files and RGB and RGBa color palettes!
+Supports every image format supported by `stb_image.h` (`jpeg`, `png`, `bmp`, `hdr`, `psd`, `tga`, `gif`, `pic`, `psd`, `pgm`, `ppm`) (untested for animated `gif`s)
 
 ## Compiling
 ### GNU/Linux
 Simply use
 ```bash
-gcc -o fbimg fbimg.c -lpng
+gcc -o fbimg fbimg.c -lm
 ```
 
 ### Other OSes using the Linux kernel
@@ -26,8 +25,10 @@ Sadly, the Framebuffer is a linux-only feature.
 ```
 
 ## Roadmap
-* [ ] Use stbimg instead of libpng to support more image formats
+* [X] Use stbimg instead of libpng to support more image formats
 * [ ] Allow the user to draw at any position on screen via CLI arguments
+* [ ] Allow the user to crop the image via CLI arguments
+* [ ] Add an option to rezise the image if it is too big for the screen
 * [ ] Add `-v` (`--verbose`) that print the commented stuff
 * [ ] Add `-h` (`--help`)
 * [ ] Support videos
