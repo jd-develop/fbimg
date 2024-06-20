@@ -1,0 +1,5 @@
+# Tell GitHub linguist that I didn’t wrote stb_image.h
+stb_image.h linguist-vendored
+
+# Auto detect text files and perform LF normalization
+* text=auto
