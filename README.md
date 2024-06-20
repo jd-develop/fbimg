@@ -4,7 +4,9 @@ Display images in tty using the Linux Framebuffer!
 
 Original code found in [Qt Documentation](https://doc.qt.io/archives/3.3/emb-framebuffer-howto.html), a little bit modified by [Hugo Rodde](https://github.com/roddehugo/linuxfb).
 
-Supports every image format supported by `stb_image.h` (`jpeg`, `png`, `bmp`, `hdr`, `psd`, `tga`, `gif`, `pic`, `psd`, `pgm`, `ppm`) (untested for animated `gif`s)
+Supports every image format supported by `stb_image.h` (`jpeg`, `png`, `bmp`, `hdr`, `psd`, `tga`, `gif`, `pic`, `psd`, `pgm`, `ppm`).
+
+Only the first image of animated `gif`s is displayed.
 
 ## Compiling
 ### GNU/Linux
