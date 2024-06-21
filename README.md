@@ -25,8 +25,10 @@ Sadly, the Framebuffer is a linux-only feature.
 
 ## Usage
 ```bash
-./fbimg path_to_img.png
+./fbimg path/to/img.png
 ```
+> [!Important]
+> You need either to run it as root, either to add yourself in the `video` group!
 
 ## Roadmap
 * [X] Use stbimg instead of libpng to support more image formats
