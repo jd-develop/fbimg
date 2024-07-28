@@ -32,7 +32,7 @@ Sadly, the Framebuffer is a linux-only feature.
 
 ## Roadmap
 * [X] Use stbimg instead of libpng to support more image formats
-* [ ] Allow the user to draw at any position on screen via CLI arguments
+* [ ] Allow the user to draw at any position on screen via [CLI arguments](https://stackoverflow.com/questions/9642732/parsing-command-line-arguments-in-c)
 * [ ] Allow the user to crop the image via CLI arguments
 * [ ] Add an option to rezise the image if it is too big for the screen (using [this](https://github.com/nothings/stb/blob/master/stb_image_resize2.h) for example)
 * [ ] Add `-v` (`--verbose`) that print the commented stuff
