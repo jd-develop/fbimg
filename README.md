@@ -17,11 +17,8 @@ Simply use
 gcc -o fbimg fbimg.c -lm
 ```
 
-### Other OSes using the Linux kernel
-I assume that if you use such OS (and want to compile this program) you know how to compile C code.
-
 ### Other OSes
-Sadly, the Framebuffer is a linux-only feature.
+Sadly, the Framebuffer is a Linux-only feature.
 
 ## Usage
 ```bash
