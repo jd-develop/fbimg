@@ -75,18 +75,22 @@ int main(int argc, char** argv)
         exit(4);
     }
     // printf("The framebuffer device was mapped to memory successfully.\n");
-    
+
     /* open image */
     if (argc < 2)
     {
-        perror("Accepts one image as argument");
+        close(fbfd);
+        munmap(fbp, screensize);
+        printf("Please give an image as argument\n");
         exit(6);
     }
 
     data = stbi_load(argv[1], &width, &height, &n, 4);
     if (data == NULL)
     {
-        perror("An error occured when reading the image.");
+        close(fbfd);
+        munmap(fbp, screensize);
+        printf("An error occured when reading the image\n");
         exit(7);
     }
 
@@ -98,7 +102,7 @@ int main(int argc, char** argv)
         width = vinfo.xres;
     for (y = 0; y < height; y++)
     {
-        for (x = 0; x < width; x++ )
+        for (x = 0; x < width; x++)
         {
             x_for_loc = x + (vinfo.xres-width);
             location = (x_for_loc+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
