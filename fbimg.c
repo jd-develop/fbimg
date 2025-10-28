@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     long int screensize;
     int height, width, n, original_width;
     unsigned char* data;
-    unsigned int i, x, y;
+    int x, y;
     long int location;
     unsigned int x_for_loc;
 
@@ -95,10 +95,10 @@ int main(int argc, char** argv)
     }
 
     /* print it */
-    if (height > vinfo.yres-5)
+    if (height > (int)vinfo.yres-5)
         height = vinfo.yres-5;
     original_width = width;
-    if (width > vinfo.xres)
+    if (width > (int)vinfo.xres)
         width = vinfo.xres;
     for (y = 0; y < height; y++)
     {
