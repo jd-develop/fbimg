@@ -2,7 +2,7 @@
 
 Display images in tty using the Linux Framebuffer!
 
-Original code found in [Qt Documentation](https://doc.qt.io/archives/3.3/emb-framebuffer-howto.html), a little bit modified by [Hugo Rodde](https://github.com/roddehugo/linuxfb).
+Original code found in the [Qt Documentation](https://doc.qt.io/archives/3.3/emb-framebuffer-howto.html), a little bit modified by [Hugo Rodde](https://github.com/roddehugo/linuxfb).
 
 The `stb_image` library is part of the [`stb`](https://github.com/nothings/stb) single-file public-domain libraries collection.
 
